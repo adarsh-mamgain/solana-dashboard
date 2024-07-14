@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState } from "react";
 import { DAS } from "helius-sdk";
 import { Input } from "./shared/Input";
 import { Button } from "./shared/Button";
@@ -9,32 +9,31 @@ import { Loading } from "./shared/Loading";
 import { fetchData } from "../utils/api";
 
 export default function AccountExplorer() {
-  const [address, setAddress] = useState("");
+  const [address, setAddress] = useState(
+    "524nvr3JESQpYq5UUD7QMkpuDMg8TyyJBGr5m47jWZfe"
+  );
   const [assets, setAssets] = useState<DAS.GetAssetResponseList | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [page, setPage] = useState(1);
   const limit = 10;
 
-  const fetchAssets = useCallback(
-    async (pageNum: number) => {
-      if (!address) return;
-      setIsLoading(true);
-      setError(null);
-      try {
-        const data = await fetchData<DAS.GetAssetResponseList>(
-          `/api/assets-by-owner?ownerAddress=${address}&page=${pageNum}&limit=${limit}`
-        );
-        setAssets(data);
-        setPage(pageNum);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "An error occurred");
-      } finally {
-        setIsLoading(false);
-      }
-    },
-    [address]
-  );
+  const fetchAssets = async (pageNum: number) => {
+    if (!address) return;
+    setIsLoading(true);
+    setError(null);
+    try {
+      const data = await fetchData<DAS.GetAssetResponseList>(
+        `/api/assets-by-owner?ownerAddress=${address}&page=${pageNum}&limit=${limit}`
+      );
+      setAssets(data);
+      setPage(pageNum);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "An error occurred");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div>
