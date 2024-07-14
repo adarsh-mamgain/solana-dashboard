@@ -1,3 +1,29 @@
+# Solana Dashboard
+
+This project is a dashboard for exploring various aspects of the Solana blockchain, including tokens, accounts, and blocks. Built with Next.js, it provides a user-friendly interface for interacting with the Solana network.
+
+## Features
+
+- **Token Explorer**: Search and view detailed information about tokens on the Solana blockchain.
+- **Account Explorer**: Explore account details including balances and associated tokens.
+- **Block Explorer**: View details of specific blocks, including transactions and rewards.
+
+## Technologies Used
+
+- [Next.js](https://nextjs.org/): A React framework for building web applications.
+- [Tailwind CSS](https://tailwindcss.com/): A utility-first CSS framework for rapid UI development.
+- [Solana Web3.js](https://github.com/solana-labs/solana-web3.js): Solana JavaScript API for interacting with the Solana blockchain.
+- [Helius SDK](https://www.npmjs.com/package/helius-sdk): A JavaScript SDK for building applications on the Solana blockchain.
+
+## Getting Started
+
+To get started with the Solana Dashboard, follow these steps:
+
+1. Clone the repository:
+
+````bash
+git clone https://github.com/your-repository/solana-dashboard.git
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
@@ -12,7 +38,7 @@ yarn dev
 pnpm dev
 # or
 bun dev
-```
+````
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
