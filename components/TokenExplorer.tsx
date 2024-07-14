@@ -1,6 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import { Input } from "./shared/Input";
+import { Button } from "./shared/Button";
+import { ErrorMessage } from "./shared/ErrorMessage";
+import { Loading } from "./shared/Loading";
+import { fetchData } from "../utils/api";
 
 interface TokenInfo {
   mintAddress: string;
@@ -28,11 +33,9 @@ export default function TokenExplorer() {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await fetch(`/api/token?mintAddress=${mintAddress}`);
-      if (!response.ok) {
-        throw new Error("Failed to fetch token info");
-      }
-      const data = await response.json();
+      const data = await fetchData<TokenInfo>(
+        `/api/token?mintAddress=${mintAddress}`
+      );
       setTokenInfo(data);
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred");
@@ -45,24 +48,15 @@ export default function TokenExplorer() {
     <div>
       <h2 className="text-2xl font-semibold mb-4">Token Explorer</h2>
       <div className="flex mb-4">
-        <input
-          type="text"
+        <Input
           value={mintAddress}
-          onChange={(e) => setMintAddress(e.target.value)}
+          onChange={setMintAddress}
           placeholder="Enter Token Mint Address"
-          className="flex-grow p-2 border rounded-l"
         />
-        <button
-          onClick={fetchTokenInfo}
-          className="bg-blue-500 text-white px-4 py-2 rounded-r hover:bg-blue-600 transition-colors"
-        >
-          Fetch Token Info
-        </button>
+        <Button onClick={fetchTokenInfo}>Fetch Token Info</Button>
       </div>
-      {isLoading && <p className="text-gray-600">Loading...</p>}
-      {error && (
-        <p className="text-red-500 bg-red-100 p-2 rounded">Error: {error}</p>
-      )}
+      {isLoading && <Loading />}
+      {error && <ErrorMessage message={error} />}
       {tokenInfo && (
         <div className="bg-white p-4 rounded shadow">
           <h3 className="text-xl font-semibold mb-2">Token Information</h3>

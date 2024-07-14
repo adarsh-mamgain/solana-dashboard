@@ -1,10 +1,16 @@
 "use client";
 
 import { useState } from "react";
+import { Input } from "./shared/Input";
+import { Button } from "./shared/Button";
+import { ErrorMessage } from "./shared/ErrorMessage";
+import { Loading } from "./shared/Loading";
+import { fetchData } from "../utils/api";
 
 interface BlockInfo {
   slot: number;
   blockTime: number | null;
+  blockHeight: number | null;
   parentSlot: number;
   transactions: number;
   blockhash: string;
@@ -28,11 +34,7 @@ export default function BlockExplorer() {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await fetch(`/api/block?slot=${slot}`);
-      if (!response.ok) {
-        throw new Error("Failed to fetch block info");
-      }
-      const data = await response.json();
+      const data = await fetchData<BlockInfo>(`/api/block?slot=${slot}`);
       setBlockInfo(data);
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred");
@@ -45,24 +47,11 @@ export default function BlockExplorer() {
     <div>
       <h2 className="text-2xl font-semibold mb-4">Block Explorer</h2>
       <div className="flex mb-4">
-        <input
-          type="text"
-          value={slot}
-          onChange={(e) => setSlot(e.target.value)}
-          placeholder="Enter Block Slot"
-          className="flex-grow p-2 border rounded-l"
-        />
-        <button
-          onClick={fetchBlockInfo}
-          className="bg-blue-500 text-white px-4 py-2 rounded-r hover:bg-blue-600 transition-colors"
-        >
-          Fetch Block Info
-        </button>
+        <Input value={slot} onChange={setSlot} placeholder="Enter Block Slot" />
+        <Button onClick={fetchBlockInfo}>Fetch Block Info</Button>
       </div>
-      {isLoading && <p className="text-gray-600">Loading...</p>}
-      {error && (
-        <p className="text-red-500 bg-red-100 p-2 rounded">Error: {error}</p>
-      )}
+      {isLoading && <Loading />}
+      {error && <ErrorMessage message={error} />}
       {blockInfo && (
         <div className="bg-white p-4 rounded shadow">
           <h3 className="text-xl font-semibold mb-2">Block Information</h3>
@@ -74,6 +63,10 @@ export default function BlockExplorer() {
             {blockInfo.blockTime
               ? new Date(blockInfo.blockTime * 1000).toLocaleString()
               : "N/A"}
+          </p>
+          <p>
+            <span className="font-semibold">Block Height:</span>{" "}
+            {blockInfo.blockHeight}
           </p>
           <p>
             <span className="font-semibold">Parent Slot:</span>{" "}
