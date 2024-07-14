@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@solana/spl-token": "^0.4.8",
     "@solana/web3.js": "^1.95.0",
     "helius-sdk": "^1.3.4",
     "next": "14.2.5",
